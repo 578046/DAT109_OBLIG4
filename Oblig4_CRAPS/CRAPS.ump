@@ -1,0 +1,120 @@
+// Umple class diagram representing card games
+// in the Oh Hell and Whist family
+
+namespace Terning;
+class Terning {
+  2--1 TerningKopp;
+  
+  int MAX = 6;
+  int verdi;
+  
+  public int trill() {
+    verdi = (int) (Math.random() * max) + 1;
+    return verdi;
+  }
+}
+
+namespace TerningKopp;
+
+class TerningKopp {
+  
+  Terning t1 = new Terning();
+  Terning t2 = new Terning();
+  
+   public int trill() {
+		return t1.trill() + t2.trill();
+   }
+}
+
+namespace Client;
+
+class Client {
+    1--1 TerningKopp;
+  
+  public static void main(String[] args) {
+
+		GameKeeper spill = new GameKeeper();
+		spill.spill();
+	}
+  
+}
+
+namespace GameKeeper;
+
+class GameKeeper {
+  1--1 Client;
+  
+    private Terning t1;
+	private Terning t2;
+	private TerningKopp terninger = new TerningKopp(t1, t2);
+	int score = terninger.trill();
+	int forrigeScore = 0;
+	int antall = 0;
+	boolean vunnet = false;
+
+	public void spill() {
+
+		while (!vunnet) {
+			antall++;
+			if (antall == 1) {
+				System.out.println("First score = " + score);
+
+				if (score == 7 || score == 11) {
+					System.out.println("Du vinner med score " + score);
+					vunnet = true;
+					break;
+				} else if (score == 2 || score == 3 || score == 12) {
+					System.out.println("Du tapte med score " + score + "...");
+					vunnet = false;
+					break;
+				}
+			} else if (antall > 1) {
+				forrigeScore = score;
+				score = terninger.trill();
+				System.out.println("Score = " + score);
+
+				if (score == forrigeScore) {
+					System.out.println("Du vinner!");
+					vunnet = true;
+					break;
+				} else if (score == 7) {
+					System.out.println("Tapte med 7");
+					vunnet = false;
+					break;
+				} else {
+					System.out.println("Trill på nytt");
+					System.out.println("Ny score = " + score);
+				}
+			}
+		}
+	}
+}
+
+//$?[End_of_model]$?
+
+namespace -;
+
+//Position information of the display on a diagram of all classes and of their associations
+
+class Terning
+{
+  position 49 30 109 75;
+  position.association Terning__TerningKopp 30,75 30,0;
+}
+
+class TerningKopp
+{
+  position 49 173 109 75;
+}
+
+class Client
+{
+  position 49 330 109 41;
+  position.association Client__TerningKopp 30,0 30,75;
+}
+
+class GameKeeper
+{
+  position 410 357 109 75;
+  position.association Client__GameKeeper 0,4 109,31;
+}
